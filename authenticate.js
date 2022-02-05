@@ -1,9 +1,9 @@
-const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
-const User = require("./models/user");
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const localStrategy = require("passport-local").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy;
+const User = require("./models/user");
 
 const config = require("./config");
 
@@ -35,3 +35,11 @@ exports.jwtPassport = passport.use(
 );
 
 exports.verifyUser = passport.authenticate("jwt", { session: false });
+exports.verifyAdmin = (req, res, next) => {
+  if (!!req.user.admin) {
+    return next();
+  }
+  const error = new Error("You are not authorized to perform this operation!");
+  error.status = 403;
+  return next(error);
+};
