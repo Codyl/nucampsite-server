@@ -14,7 +14,6 @@ campsiteRouter
     Campsite.find()
       .populate("comments.author")
       .then((campsites) => {
-        console.log("here");
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
         res.json(campsites);
